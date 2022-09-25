@@ -1,33 +1,20 @@
 import { Fragment, useState } from "react"
-import { Drawer, SIZE } from "baseui/drawer"
 
 import { RiShareForwardFill } from "react-icons/ri"
 import { GoReply } from "react-icons/go"
 import { IoMdCreate } from "react-icons/io"
 
+import { classnames } from "@/lib/helpers"
 import RainbowButton from "./RainbowButton"
 import ExternalLink from "./ExternalLink"
+import Modal from "./Modal"
 
 function SendMessage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const toggleModalOpen = () => setIsModalOpen((open) => !open)
   return (
     <Fragment>
-      <Drawer
-        size={SIZE.auto}
-        isOpen={isModalOpen}
-        overrides={{
-          DrawerBody: {
-            style: {
-              width: "100vw",
-              maxWidth: "40rem",
-            },
-          },
-        }}
-        autoFocus
-        onClose={toggleModalOpen}
-      >
-        <div tabIndex={0} />
+      <Modal onClose={toggleModalOpen} show={isModalOpen}>
         <div className="text-base flex flex-col h-full">
           <div className="flex items-center space-x-4">
             <div className="w-8 h-8 bg-black"></div>
@@ -49,10 +36,13 @@ function SendMessage() {
             </RainbowButton>
           </div>
         </div>
-      </Drawer>
+      </Modal>
       <div
         onClick={toggleModalOpen}
-        className="w-12 cursor-pointer h-12 bg-indigo-500 shadow-md hover:ring-2 rounded-full flex items-center justify-center"
+        className={classnames(
+          "transition-transform ring-blue-500 duration-150 hover:ring-2 hover:scale-105 active:scale-95",
+          "w-12 cursor-pointer h-12 bg-indigo-500 shadow-md hover:ring-2 rounded-full flex items-center justify-center"
+        )}
       >
         <IoMdCreate className="text-white text-xl" />
       </div>

@@ -1,30 +1,18 @@
 import { Fragment, useState } from "react"
-import { Drawer, SIZE, ANCHOR } from "baseui/drawer"
-import RainbowButton from "./RainbowButton"
-import ExternalLink from "./ExternalLink"
+
 import { RiShareForwardFill } from "react-icons/ri"
 import { GoReply } from "react-icons/go"
+
+import Drawer from "./Drawer"
+import RainbowButton from "./RainbowButton"
+import ExternalLink from "./ExternalLink"
 
 function MessageItem() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const toggleModalOpen = () => setIsModalOpen((open) => !open)
   return (
     <Fragment>
-      <Drawer
-        size={SIZE.auto}
-        isOpen={isModalOpen}
-        overrides={{
-          DrawerBody: {
-            style: {
-              width: "100vw",
-              maxWidth: "40rem",
-            },
-          },
-        }}
-        autoFocus
-        onClose={toggleModalOpen}
-      >
-        <div tabIndex={0} />
+      <Drawer show={isModalOpen} onClose={toggleModalOpen}>
         <div className="text-base flex flex-col h-full">
           <div className="flex items-center space-x-4">
             <div className="w-8 h-8 bg-black"></div>

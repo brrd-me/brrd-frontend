@@ -18,7 +18,8 @@ function NavButton({ children, href }: PropsWithChildren<{ href?: any }>) {
       <a
         className={classnames(
           isActive && "bg-zinc-50",
-          "w-12 h-12 hover:bg-zinc-50 hover:ring-2 rounded-full flex items-center justify-center"
+          "w-12 h-12 hover:bg-zinc-50 rounded-full flex items-center justify-center",
+          "transition-transform ring-blue-500 duration-150 hover:ring-2 hover:scale-105 active:scale-95"
         )}
       >
         {children}
