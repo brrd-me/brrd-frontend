@@ -5,9 +5,6 @@ import { RainbowKitProvider, getDefaultWallets } from "@rainbow-me/rainbowkit"
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi"
 import { alchemyProvider } from "wagmi/providers/alchemy"
 import { publicProvider } from "wagmi/providers/public"
-import { Provider as StyletronProvider } from "styletron-react"
-import { LightTheme, BaseProvider } from "baseui"
-import { styletron } from "../styletron"
 
 const hhDefaultURL = chain.hardhat.rpcUrls.default
 const customChain = {
@@ -45,11 +42,7 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
-        <StyletronProvider value={styletron}>
-          <BaseProvider theme={LightTheme}>
-            <Component {...pageProps} />
-          </BaseProvider>
-        </StyletronProvider>
+        <Component {...pageProps} />
       </RainbowKitProvider>
     </WagmiConfig>
   )
