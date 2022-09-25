@@ -1,4 +1,4 @@
-import "../styles/globals.css"
+import "@/src/styles/globals.css"
 import "@rainbow-me/rainbowkit/styles.css"
 import type { AppProps } from "next/app"
 import { RainbowKitProvider, getDefaultWallets } from "@rainbow-me/rainbowkit"
@@ -9,15 +9,14 @@ import { Provider as StyletronProvider } from "styletron-react"
 import { LightTheme, BaseProvider } from "baseui"
 import { styletron } from "../styletron"
 
-chain.hardhat.rpcUrls.default
+const hhDefaultURL = chain.hardhat.rpcUrls.default
 const customChain = {
   ...chain.hardhat,
   rpcUrls: {
     ...chain.hardhat.rpcUrls,
-    default: "http://10.18.200.153:8545",
+    default: process.env.NEXT_PUBLIC_HH_DEV_URL || hhDefaultURL,
   },
 }
-
 const { chains, provider, webSocketProvider } = configureChains(
   [customChain],
   [
@@ -31,7 +30,7 @@ const { chains, provider, webSocketProvider } = configureChains(
 )
 
 const { connectors } = getDefaultWallets({
-  appName: "RainbowKit App",
+  appName: "BRRD",
   chains,
 })
 
