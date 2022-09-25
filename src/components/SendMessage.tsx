@@ -1,5 +1,5 @@
 import { Fragment, useState } from "react"
-import { Drawer, SIZE, ANCHOR } from "baseui/drawer"
+import { Drawer, SIZE } from "baseui/drawer"
 import RainbowButton from "./RainbowButton"
 import ExternalLink from "./ExternalLink"
 import { RiShareForwardFill } from "react-icons/ri"

@@ -1,17 +1,26 @@
+import type { PropsWithChildren } from "react"
 import { classnames, noOp } from "@/lib/helpers"
 
 function RainbowInput({
   value,
-  onText = noOp,
+  onText = noOp as any,
   isPlain,
   className,
   placeholder,
-}) {
+  ...props
+}: PropsWithChildren<
+  Partial<HTMLInputElement> & {
+    isPlain?: boolean
+    onText?: (text: string) => void
+    className?: string
+  }
+>) {
   return (
     <input
+      {...(props as any)}
       value={value}
       placeholder={placeholder}
-      onInput={({ target }) => onText(target.value)}
+      onInput={({ currentTarget }) => onText(currentTarget.value)}
       className={classnames(
         className,
         isPlain ? "bg-zinc-50 border" : "shadow-lg",

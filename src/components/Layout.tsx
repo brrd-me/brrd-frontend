@@ -25,7 +25,7 @@ function NavButton({ children, href }: PropsWithChildren<{ href?: any }>) {
   )
 }
 
-function Layout({ children }) {
+function Layout({ children }: PropsWithChildren<{}>) {
   return (
     <div className="flex p-4 max-w-4xl mx-auto min-h-screen">
       <div className="flex px-4 flex-col space-y-4 mb-4">
