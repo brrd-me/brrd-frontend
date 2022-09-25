@@ -1,7 +1,6 @@
-import * as React from "react"
+import type { Server } from "styletron-engine-atomic"
 import Document, { Head, Html, Main, NextScript } from "next/document"
 import { Provider as StyletronProvider } from "styletron-react"
-import type { Server } from "styletron-engine-atomic"
 import { styletron } from "../styletron"
 
 class CustomDocument extends Document<{ stylesheets: any[] }> {

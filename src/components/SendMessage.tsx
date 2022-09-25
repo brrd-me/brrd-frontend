@@ -1,10 +1,12 @@
 import { Fragment, useState } from "react"
 import { Drawer, SIZE } from "baseui/drawer"
-import RainbowButton from "./RainbowButton"
-import ExternalLink from "./ExternalLink"
+
 import { RiShareForwardFill } from "react-icons/ri"
 import { GoReply } from "react-icons/go"
 import { IoMdCreate } from "react-icons/io"
+
+import RainbowButton from "./RainbowButton"
+import ExternalLink from "./ExternalLink"
 
 function SendMessage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
