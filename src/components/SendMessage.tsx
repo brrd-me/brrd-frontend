@@ -1,51 +1,60 @@
-import { Fragment, useState } from "react"
+import { Fragment } from "react"
 
-import { RiShareForwardFill } from "react-icons/ri"
-import { GoReply } from "react-icons/go"
+import { RiSendPlaneFill } from "react-icons/ri"
 import { IoMdCreate } from "react-icons/io"
 
 import { classnames } from "@/lib/helpers"
+import useOnOffMachine from "@/lib/hooks/useOnOffMachine"
 import RainbowButton from "./RainbowButton"
-import ExternalLink from "./ExternalLink"
+import RainbowInput from "./RainbowInput"
 import Modal from "./Modal"
 
 function SendMessage() {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const toggleModalOpen = () => setIsModalOpen((open) => !open)
+  const drawer = useOnOffMachine()
   return (
     <Fragment>
-      <Modal onClose={toggleModalOpen} show={isModalOpen}>
+      <Modal
+        closeOnBackdropClick={false}
+        onClose={drawer.turnOff}
+        show={drawer.isOn}
+      >
         <div className="text-base flex flex-col h-full">
           <div className="flex items-center space-x-4">
-            <div className="w-8 h-8 bg-black"></div>
-            <ExternalLink>0x01a...df0</ExternalLink>
+            <strong>Send To:</strong>
+            <RainbowInput isPlain placeholder="@username" />
           </div>
-          <div className="my-4 pt-4 border-t">
-            <strong>Subject</strong>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+          <div className="my-4 border-t">
+            <input
+              className="w-full border-b py-3 outline-none"
+              type="text"
+              placeholder="Subject"
+            />
+            <textarea
+              className="w-full min-h-[10rem] border-b py-3 outline-none"
+              placeholder="Mail body"
+            />
           </div>
           <div className="flex-grow" />
-          <div className="flex items-center justify-end space-x-4 overflow-hidden">
-            <RainbowButton className="flex items-center space-x-2" isPlain>
-              <GoReply />
-              <span>REPLY</span>
-            </RainbowButton>
-            <RainbowButton className="flex items-center space-x-2" isPlain>
-              <RiShareForwardFill />
-              <span>FORWARD</span>
+          <div className="flex justify-end">
+            <RainbowButton
+              className="flex items-center space-x-2 text-lg px-6 py-3"
+              isPlain
+            >
+              <RiSendPlaneFill />
+              <span>SEND</span>
             </RainbowButton>
           </div>
         </div>
       </Modal>
-      <div
-        onClick={toggleModalOpen}
+      <button
+        onClick={drawer.turnOn}
         className={classnames(
           "transition-transform ring-blue-500 duration-150 hover:ring-2 hover:scale-105 active:scale-95",
-          "w-12 cursor-pointer h-12 bg-indigo-500 shadow-md hover:ring-2 rounded-full flex items-center justify-center"
+          "cursor-pointer w-12 h-12 bg-[#00FFC2] shadow-md rounded-full flex items-center justify-center"
         )}
       >
-        <IoMdCreate className="text-white text-xl" />
-      </div>
+        <IoMdCreate className="text-black text-2xl" />
+      </button>
     </Fragment>
   )
 }
