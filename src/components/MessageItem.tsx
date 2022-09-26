@@ -15,7 +15,7 @@ function MessageItem() {
       <Drawer show={modal.isOn} onClose={modal.turnOff}>
         <div className="flex items-center space-x-4">
           <div className="w-8 h-8 bg-black"></div>
-          <ExternalLink>0x01a...df0</ExternalLink>
+          <ExternalLink className="h-8">0x01a...df0</ExternalLink>
         </div>
         <div className="my-4 pt-4 border-t">
           <strong>Subject</strong>
