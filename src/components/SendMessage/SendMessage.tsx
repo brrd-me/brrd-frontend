@@ -1,11 +1,12 @@
 import { Fragment, useEffect } from "react"
 import { utils } from "ethers"
-
 import { RiSendPlaneFill } from "react-icons/ri"
 
-import { MOCK_USER_LIST } from "@/src/mockData/users"
+import useSendEmail from "@/contracts/useSendEmail"
 import useOnOffMachine from "@/lib/hooks/useOnOffMachine"
 import useAsyncState from "@/lib/hooks/useAsyncState"
+import { MOCK_USER_LIST } from "@/src/mockData/users"
+
 import RainbowButton from "@/components/RainbowButton"
 import ExternalLink from "@/components/ExternalLink"
 import RainbowInput from "@/components/RainbowInput"
@@ -16,11 +17,22 @@ const cleanUpUsername = (rawUsername: string) => rawUsername.replace(/@/g, "")
 
 function SendMessage() {
   const emailModal = useOnOffMachine()
+  const [email, setEmail, resetEmailState] = useAsyncState({
+    body: "",
+    subject: "",
+  })
   const [sendingTo, setSendingTo, resetSendingToState] = useAsyncState({
     addressOrUsername: "",
     isUserAlias: false,
   })
   const { addressOrUsername, isUserAlias } = sendingTo
+
+  // Contract services
+  const emailSender = useSendEmail()
+
+  function handleSendEmail() {
+    emailSender.send(sendingTo.addressOrUsername, "subject", "awa")
+  }
 
   useEffect(() => {
     const username = cleanUpUsername(addressOrUsername)
@@ -30,6 +42,7 @@ function SendMessage() {
 
   useEffect(() => {
     resetSendingToState()
+    resetEmailState()
   }, [emailModal.isOn])
 
   const showPositiveState = isUserAlias || utils.isAddress(addressOrUsername)
@@ -60,11 +73,17 @@ function SendMessage() {
           </div>
           <div className="my-4 border-t">
             <input
+              value={email.subject}
+              onChange={({ target: { value: subject } }) =>
+                setEmail({ subject })
+              }
               className="w-full border-b py-3 outline-none"
               type="text"
               placeholder="Subject"
             />
             <textarea
+              value={email.body}
+              onChange={({ target: { value: body } }) => setEmail({ body })}
               className="w-full min-h-[10rem] border-b py-3 outline-none"
               placeholder="Body"
             />
@@ -72,6 +91,7 @@ function SendMessage() {
           <div className="flex-grow" />
           <div className="flex justify-end">
             <RainbowButton
+              onClick={handleSendEmail}
               className="flex items-center space-x-2 text-lg px-6 py-3"
               isPlain
             >

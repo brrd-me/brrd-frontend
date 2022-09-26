@@ -15,7 +15,7 @@ const customChain = {
   },
 }
 const { chains, provider, webSocketProvider } = configureChains(
-  [customChain],
+  [customChain, chain.goerli],
   [
     alchemyProvider({
       // This is Alchemy's default API key.
