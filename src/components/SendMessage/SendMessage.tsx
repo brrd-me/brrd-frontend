@@ -41,12 +41,12 @@ function SendMessage() {
         show={emailModal.isOn}
       >
         <div className="text-base flex flex-col h-full">
-          <div className="flex items-center space-x-4">
+          <div className="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-4">
             <strong>Send To:</strong>
             <div className="flex space-x-2">
               <RainbowInput
                 isPlain
-                className={showPositiveState ? "font-bold" : ""}
+                className={`w-full ${showPositiveState && "font-bold"}`}
                 value={sendingTo.addressOrUsername}
                 onText={(addressOrUsername) =>
                   setSendingTo({ addressOrUsername })
