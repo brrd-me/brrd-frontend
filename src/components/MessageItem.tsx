@@ -37,7 +37,7 @@ function MessageItem() {
         onClick={modal.turnOn}
         className="cursor-pointer border-t max-w-xl flex items-center space-x-2 py-2"
       >
-        <div className="bg-black w-12 h-12 rounded-full"></div>
+        <div className="bg-black w-12 min-w-[3rem] h-12 rounded-full"></div>
         <div className="flex flex-col">
           <strong>TITLE</strong>
           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
