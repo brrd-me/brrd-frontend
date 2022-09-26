@@ -1,7 +1,7 @@
 import { useState } from "react"
 
-function useOnOffMachine(initialState: boolean = false) {
-  const [isOn, setIsOn] = useState(initialState)
+function useOnOffMachine(isOnByDefault: boolean = false) {
+  const [isOn, setIsOn] = useState(isOnByDefault)
   const turnOn = () => setIsOn(true)
   const turnOff = () => setIsOn(false)
   return {
