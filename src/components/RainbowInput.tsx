@@ -2,11 +2,9 @@ import type { PropsWithChildren } from "react"
 import { classnames, noOp } from "@/lib/helpers"
 
 function RainbowInput({
-  value,
   onText = noOp as any,
   isPlain,
   className,
-  placeholder,
   ...props
 }: PropsWithChildren<
   Partial<HTMLInputElement> & {
@@ -18,8 +16,6 @@ function RainbowInput({
   return (
     <input
       {...(props as any)}
-      value={value}
-      placeholder={placeholder}
       onInput={({ currentTarget }) => onText(currentTarget.value)}
       className={classnames(
         className,

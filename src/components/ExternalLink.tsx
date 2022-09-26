@@ -22,7 +22,7 @@ function ExternalLink({
         rel="noopener noreferrer"
         className={classnames(
           isPrimitive ||
-            "focus:ring-2 ring-slate-100 text-sm group inline-flex space-x-1 items-center hover:bg-zinc-100 active:scale-105 py-1 px-2 rounded-lg",
+            "focus:ring-2 ring-slate-100 text-sm group inline-flex space-x-1 items-center hover:bg-zinc-50 active:scale-105 py-1 px-2 rounded-[12px]",
           className
         )}
         target={isTargetSelf ? "_self" : "_blank"}
