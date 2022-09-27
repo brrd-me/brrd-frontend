@@ -31,7 +31,7 @@ function SendMessage() {
   const emailSender = useSendEmail()
 
   function handleSendEmail() {
-    emailSender.send(sendingTo.addressOrUsername, "subject", "awa")
+    emailSender.send(sendingTo.addressOrUsername, email.subject, email.body)
   }
 
   useEffect(() => {
