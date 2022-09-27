@@ -12,9 +12,9 @@ const HomePage: NextPage = () => {
       <div className="flex flex-col">
         {isEmpty && <p>Empty :{"("}</p>}
         {emails.map((email) => {
-          console.log({ email })
           return (
             <MessageItem
+              address={email.sender}
               time={email.time.toNumber()}
               message={email.message}
               subject={email.subject}

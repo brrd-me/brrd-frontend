@@ -14,6 +14,7 @@ const SentPage: NextPage = () => {
         {emails.map((email) => {
           return (
             <MessageItem
+              address={email.receiver}
               time={email.time.toNumber()}
               message={email.message}
               subject={email.subject}
