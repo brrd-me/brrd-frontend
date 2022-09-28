@@ -5,7 +5,7 @@ import PrimitiveDialog, { DialogProps } from "./PrimitiveDialog"
 function Modal({ children, ...props }: DialogProps) {
   return (
     <PrimitiveDialog
-      className="items-center justify-center p-4 mb-12"
+      className="items-end md:items-center justify-center md:p-4 md:mb-12"
       {...props}
     >
       <Transition.Child
@@ -17,7 +17,7 @@ function Modal({ children, ...props }: DialogProps) {
         leaveFrom="opacity-95 scale-95"
         leaveTo="opacity-0 scale-90"
       >
-        <Dialog.Panel className="w-screen max-w-xl transform rounded-[24px] bg-white py-6 px-8 text-left align-middle shadow-xl transition-all">
+        <Dialog.Panel className="w-screen max-w-xl transform rounded-t-[24px] md:rounded-b-[24px] bg-white py-6 px-8 text-left align-middle shadow-xl transition-all">
           {children}
         </Dialog.Panel>
       </Transition.Child>
