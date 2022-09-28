@@ -1,6 +1,4 @@
-import { PropsWithChildren, useMemo } from "react"
-import Link from "next/link"
-import { useRouter } from "next/router"
+import { type PropsWithChildren, useMemo } from "react"
 import { useAccount } from "wagmi"
 
 import {
@@ -12,42 +10,12 @@ import { GrInbox } from "react-icons/gr"
 import { RiMailSendLine } from "react-icons/ri"
 
 import emojiAvatarForAddress from "@/lib/emojiAvatarForAddress"
-import { classnames, noOp } from "@/lib/helpers"
-import RainbowInput from "./RainbowInput"
-import SendMessage from "./SendMessage"
+import { noOp } from "@/lib/helpers"
+import RainbowInput from "@/components/RainbowInput"
+import SendMessage from "@/components/SendMessage"
+import NavButton from "./NavButton"
 
-function NavButton({
-  children,
-  href,
-  onClick,
-  style,
-  className,
-}: PropsWithChildren<{
-  href?: any
-  onClick?(): void
-  style?: {}
-  className?: string
-}>) {
-  const router = useRouter()
-  const isActive = router.route === href
-  return (
-    <Link href={href}>
-      <a
-        onClick={onClick}
-        style={style}
-        className={classnames(
-          className,
-          isActive && "bg-zinc-50",
-          "w-12 h-12 hover:bg-zinc-50 rounded-full flex items-center justify-center",
-          "transition-transform ring-blue-500 duration-150 hover:ring-2 hover:scale-105 active:scale-95"
-        )}
-      >
-        {children}
-      </a>
-    </Link>
-  )
-}
-
+export const EVENT_ON_SEARCH = "EVENT_ON_SEARCH"
 function Layout({ children }: PropsWithChildren<{}>) {
   const { address } = useAccount()
   const { openAccountModal } = useAccountModal()
@@ -80,12 +48,19 @@ function Layout({ children }: PropsWithChildren<{}>) {
         <NavButton href="/sent">
           <RiMailSendLine />
         </NavButton>
-        <div className="flex-grow" />
+        <div className="py-2" />
         <SendMessage />
       </div>
       <div className="flex flex-col flex-grow space-y-4">
         <div className="flex items-center justify-between">
           <RainbowInput
+            onText={(detail) =>
+              window.dispatchEvent(
+                new CustomEvent(EVENT_ON_SEARCH, {
+                  detail,
+                })
+              )
+            }
             className="w-full md:max-w-xs"
             placeholder="Search for an email"
             isPlain
