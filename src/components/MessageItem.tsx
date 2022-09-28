@@ -3,6 +3,7 @@ import { Fragment } from "react"
 import { RiShareForwardFill } from "react-icons/ri"
 import { GoReply } from "react-icons/go"
 
+import { beautifyAddress, getGoerliAddressURL } from "@/lib/helpers"
 import emojiAvatarForAddress from "@/lib/emojiAvatarForAddress"
 import { relativeFormat } from "@/lib/time"
 import useOnOffMachine from "@/lib/hooks/useOnOffMachine"
@@ -21,7 +22,6 @@ function MessageItem({
   subject: string
   address: string
 }) {
-  console.log({ time })
   const modal = useOnOffMachine()
   const userMeta = emojiAvatarForAddress(address)
   return (
@@ -34,7 +34,9 @@ function MessageItem({
           >
             {userMeta.emoji}
           </div>
-          <ExternalLink className="h-8">0x01a...df0</ExternalLink>
+          <ExternalLink href={getGoerliAddressURL(address)} className="h-8">
+            {beautifyAddress(address)}
+          </ExternalLink>
         </div>
         <div className="my-4 pt-4 border-t">
           <strong>{subject}</strong>
