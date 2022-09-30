@@ -40,7 +40,7 @@ function useReadEmails(functionName: "emailsReceived" | "emailsSent") {
     if (list.length <= 0) return list
     return list.filter((item) => item.serialized.includes(filter))
   }, [filter, list.length])
-
+  emails.reverse();
   return { emails, isEmpty: emails.length <= 0 }
 }
 
