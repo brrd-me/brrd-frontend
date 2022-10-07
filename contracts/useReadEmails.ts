@@ -5,9 +5,14 @@ import { EVENT_ON_SEARCH } from "@/src/components/Layout"
 import useBRRDContract, { type Email } from "./useBRRDContract"
 
 type SerializedEmail = Email & { serialized: string }
+type SerializedEmailWithPreview = SerializedEmail & {
+  setAsPreviewEmail(): void
+}
+
 function useReadEmails(functionName: "emailsReceived" | "emailsSent") {
   const { data: signer } = useSigner()
-  const [list, setList] = useState([] as SerializedEmail[])
+  const [list, setList] = useState([] as SerializedEmailWithPreview[])
+  const [previewEmail, setPreviewEmail] = useState({} as SerializedEmail)
   const [filter, setFilter] = useState("")
   const BRRDContract = useBRRDContract()
 
@@ -17,9 +22,16 @@ function useReadEmails(functionName: "emailsReceived" | "emailsSent") {
         setList(
           list.map((item) => {
             const { message, subject, receiver, sender } = item
-            return {
+            const serialized = [message, subject, receiver, sender].join("")
+            const serializedItem = {
               ...item,
-              serialized: [message, subject, receiver, sender].join(""),
+              serialized,
+            }
+            return {
+              ...serializedItem,
+              setAsPreviewEmail() {
+                setPreviewEmail(serializedItem)
+              },
             }
           })
         )
@@ -41,7 +53,12 @@ function useReadEmails(functionName: "emailsReceived" | "emailsSent") {
     return list.filter((item) => item.serialized.includes(filter))
   }, [filter, list.length])
 
-  return { emails, isEmpty: emails.length <= 0 }
+  return {
+    emails,
+    isEmpty: emails.length <= 0,
+    showPreview: !!previewEmail.time,
+    previewEmail,
+  }
 }
 
 export default useReadEmails
