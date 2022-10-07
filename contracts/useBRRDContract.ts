@@ -2,11 +2,9 @@ import { useContract, useProvider, useSigner } from "wagmi"
 import { Contract } from "ethers"
 import { ABI, ADDRESS } from "./BRRD"
 
-export interface Email {
-  sender: string
+export type Email = IEmail & {
   receiver: string
-  subject: string
-  message: string
+  sender: string
   time: number & { toNumber(): number }
 }
 
