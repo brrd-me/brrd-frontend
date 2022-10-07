@@ -2,6 +2,10 @@
  * Taken from https://raw.githubusercontent.com/rainbow-me/rainbowkit/main/packages/rainbowkit/src/components/Avatar/emojiAvatarForAddress.ts
  * Project Under MIT License
  */
+
+import { useEffect, useState } from "react"
+import { useAccount } from "wagmi"
+
 const colors = [
   "#FC5C54",
   "#FFD95A",
@@ -77,10 +81,29 @@ function hashCode(text: string) {
   return hash
 }
 
-export default function emojiAvatarForAddress(address: string) {
+function emojiAvatarForAddress(address: string) {
   const resolvedAddress = typeof address === "string" ? address : ""
   const avatarIndex = Math.abs(
     hashCode(resolvedAddress.toLowerCase()) % avatars.length
   )
   return avatars[avatarIndex ?? 0]
 }
+
+export const useEmojiAvatar = (address?: string) => {
+  const { address: connectedAddr } = useAccount()
+  const [avatar, setAvatar] = useState({
+    color: "#FFE8E8",
+    emoji: "👻",
+  })
+
+  useEffect(() => {
+    const emojiAddress = address || connectedAddr
+    if (emojiAddress) {
+      setAvatar(emojiAvatarForAddress(emojiAddress))
+    }
+  }, [connectedAddr, address])
+
+  return avatar
+}
+
+export default emojiAvatarForAddress
