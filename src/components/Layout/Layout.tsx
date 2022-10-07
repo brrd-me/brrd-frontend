@@ -1,15 +1,15 @@
 import { type PropsWithChildren } from "react"
-
 import {
   ConnectButton,
   useAccountModal,
   useConnectModal,
 } from "@rainbow-me/rainbowkit"
-import { GrInbox } from "react-icons/gr"
-import { RiMailSendLine } from "react-icons/ri"
 
 import { noOp } from "@/lib/helpers"
 import { useEmojiAvatar } from "@/lib/emojiAvatarForAddress"
+
+import { TbSend } from "react-icons/tb"
+import { AiOutlineInbox } from "react-icons/ai"
 import RainbowInput from "@/components/RainbowInput"
 import SendMessage from "@/components/SendMessage"
 import NavItem from "./NavItem"
@@ -21,7 +21,7 @@ function Layout({ children }: PropsWithChildren<{}>) {
   const onAccountPress = openAccountModal || openConnectModal
 
   return (
-    <div className="flex p-4 max-w-4xl flex-col md:flex-row mx-auto min-h-screen">
+    <div className="flex p-4 max-w-6xl flex-col md:flex-row mx-auto min-h-screen">
       <div className="flex md:flex-col md:px-4 gap-4 mb-4">
         <NavItem
           isButton
@@ -34,10 +34,10 @@ function Layout({ children }: PropsWithChildren<{}>) {
           {avatar.emoji}
         </NavItem>
         <NavItem href="/">
-          <GrInbox />
+          <AiOutlineInbox className="text-xl" />
         </NavItem>
         <NavItem href="/sent">
-          <RiMailSendLine />
+          <TbSend className="text-xl" />
         </NavItem>
         <div className="py-2" />
         <SendMessage />
