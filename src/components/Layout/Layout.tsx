@@ -1,5 +1,4 @@
-import { type PropsWithChildren, useMemo } from "react"
-import { useAccount } from "wagmi"
+import { type PropsWithChildren } from "react"
 
 import {
   ConnectButton,
@@ -9,58 +8,44 @@ import {
 import { GrInbox } from "react-icons/gr"
 import { RiMailSendLine } from "react-icons/ri"
 
-import emojiAvatarForAddress from "@/lib/emojiAvatarForAddress"
 import { noOp } from "@/lib/helpers"
+import { useEmojiAvatar } from "@/lib/emojiAvatarForAddress"
 import RainbowInput from "@/components/RainbowInput"
 import SendMessage from "@/components/SendMessage"
-import NavButton from "./NavButton"
+import NavItem from "./NavItem"
 
-export const EVENT_ON_SEARCH = "EVENT_ON_SEARCH"
 function Layout({ children }: PropsWithChildren<{}>) {
-  const { address } = useAccount()
+  const avatar = useEmojiAvatar()
   const { openAccountModal } = useAccountModal()
   const { openConnectModal = noOp } = useConnectModal()
-  const userMeta = useMemo(() => {
-    if (address) return emojiAvatarForAddress(address)
-    return {
-      color: "#FFE8E8",
-      emoji: "👻",
-    }
-  }, [address])
-
   const onAccountPress = openAccountModal || openConnectModal
+
   return (
     <div className="flex p-4 max-w-4xl flex-col md:flex-row mx-auto min-h-screen">
       <div className="flex md:flex-col md:px-4 gap-4 mb-4">
-        <NavButton
+        <NavItem
+          isButton
           onClick={onAccountPress}
           style={{
-            background: userMeta.color,
+            background: avatar.color,
           }}
-          href="#"
           className="md:hidden"
         >
-          {userMeta.emoji}
-        </NavButton>
-        <NavButton href="/">
+          {avatar.emoji}
+        </NavItem>
+        <NavItem href="/">
           <GrInbox />
-        </NavButton>
-        <NavButton href="/sent">
+        </NavItem>
+        <NavItem href="/sent">
           <RiMailSendLine />
-        </NavButton>
+        </NavItem>
         <div className="py-2" />
         <SendMessage />
       </div>
       <div className="flex flex-col flex-grow space-y-4">
         <div className="flex items-center justify-between">
           <RainbowInput
-            onText={(detail) =>
-              window.dispatchEvent(
-                new CustomEvent(EVENT_ON_SEARCH, {
-                  detail,
-                })
-              )
-            }
+            onText={dispatchInputEvent}
             className="w-full md:max-w-xs"
             placeholder="Search for an email"
             isPlain
@@ -72,6 +57,15 @@ function Layout({ children }: PropsWithChildren<{}>) {
         {children}
       </div>
     </div>
+  )
+}
+
+export const EVENT_ON_SEARCH = "EVENT_ON_SEARCH"
+function dispatchInputEvent(detail: string) {
+  window.dispatchEvent(
+    new CustomEvent(EVENT_ON_SEARCH, {
+      detail,
+    })
   )
 }
 
