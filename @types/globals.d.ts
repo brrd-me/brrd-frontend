@@ -10,3 +10,7 @@ interface IEmail {
   subject: string
   address: string
 }
+
+interface ISerializedEmail extends IEmail {
+  serialized: string
+}
