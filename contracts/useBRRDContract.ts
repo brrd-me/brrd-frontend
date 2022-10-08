@@ -1,11 +1,11 @@
 import { useContract, useProvider, useSigner } from "wagmi"
-import { Contract } from "ethers"
+import { type BigNumber, Contract } from "ethers"
 import { ABI, ADDRESS } from "./BRRD"
 
 export type Email = IEmail & {
   receiver: string
   sender: string
-  time: number & { toNumber(): number }
+  time: BigNumber
 }
 
 export interface API {
