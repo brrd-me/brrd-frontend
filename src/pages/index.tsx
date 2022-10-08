@@ -22,24 +22,22 @@ const HomePage: NextPage = () => {
           )}
         >
           {isEmpty && <p>Empty :{"("}</p>}
-          {emails.map((email) => {
+          {emails.map((item) => {
             return (
               <MessageItem
-                onClick={email.setAsPreviewEmail}
-                address={email.sender}
-                time={email.time.toNumber()}
-                message={email.message}
-                subject={email.subject}
-                key={`email-item-${email.time}`}
+                {...item}
+                address={item.sender}
+                previewEmail={previewEmail}
+                onClick={item.setAsPreviewEmail}
+                time={item.time.toNumber()}
+                key={`email-item-${item.time}`}
               />
             )
           })}
         </div>
         <MessagePreview
+          {...previewEmail}
           show={showPreview}
-          time={previewEmail.time}
-          subject={previewEmail.subject}
-          message={previewEmail.message}
           address={previewEmail.sender}
         />
       </div>

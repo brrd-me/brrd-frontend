@@ -10,6 +10,7 @@ import MessagePreview from "@/components/MessagePreview"
 const SentPage: NextPage = () => {
   const { emails, isEmpty, previewEmail, showPreview } =
     useReadEmails("emailsSent")
+
   return (
     <Layout>
       <strong>Sent</strong>
@@ -21,24 +22,22 @@ const SentPage: NextPage = () => {
           )}
         >
           {isEmpty && <p>Empty :{"("}</p>}
-          {emails.map((email) => {
+          {emails.map((item) => {
             return (
               <MessageItem
-                onClick={email.setAsPreviewEmail}
-                address={email.receiver}
-                time={email.time.toNumber()}
-                message={email.message}
-                subject={email.subject}
-                key={`email-item-${email.time}`}
+                {...item}
+                address={item.receiver}
+                previewEmail={previewEmail}
+                onClick={item.setAsPreviewEmail}
+                time={item.time.toNumber()}
+                key={`email-item-${item.time}`}
               />
             )
           })}
         </div>
         <MessagePreview
+          {...previewEmail}
           show={showPreview}
-          time={previewEmail.time}
-          subject={previewEmail.subject}
-          message={previewEmail.message}
           address={previewEmail.receiver}
         />
       </div>
