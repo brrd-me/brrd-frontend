@@ -21,8 +21,8 @@ function useReadEmails(functionName: "emailsReceived" | "emailsSent") {
       const serializeData = (list: Email[]) => {
         setList(
           list.map((item) => {
-            const { message, subject, receiver, sender } = item
-            const serialized = [message, subject, receiver, sender].join("")
+            const { message, subject, time } = item
+            const serialized = [message, subject, time].join("")
             const serializedItem = {
               ...item,
               serialized,
