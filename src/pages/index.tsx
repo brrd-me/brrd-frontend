@@ -8,17 +8,24 @@ import useReadEmails from "@/contracts/useReadEmails"
 import MessagePreview from "@/components/MessagePreview"
 
 const HomePage: NextPage = () => {
-  const { emails, isEmpty, previewEmail, showPreview } =
+  const { emails, isEmpty, previewEmail, showPreview, clearPreviewEmail } =
     useReadEmails("emailsReceived")
 
   return (
-    <Layout>
-      <strong>Inbox</strong>
-      <div className="flex border-t flex-grow">
-        <div
+    <Layout showPreview={showPreview}>
+      <div
+        className={classnames(
+          showPreview && "hidden lg:block",
+          "py-4 border-b"
+        )}
+      >
+        <strong>Inbox</strong>
+      </div>
+      <div className="flex flex-grow">
+        <section
           className={classnames(
-            showPreview && "max-w-sm",
-            "flex flex-col w-full"
+            showPreview && "max-w-sm hidden lg:flex",
+            "flex-col w-full"
           )}
         >
           {isEmpty && <p>Empty :{"("}</p>}
@@ -34,10 +41,11 @@ const HomePage: NextPage = () => {
               />
             )
           })}
-        </div>
+        </section>
         <MessagePreview
           {...previewEmail}
           show={showPreview}
+          onHidePreview={clearPreviewEmail}
           address={previewEmail.sender}
         />
       </div>

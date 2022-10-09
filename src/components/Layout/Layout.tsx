@@ -5,7 +5,7 @@ import {
   useConnectModal,
 } from "@rainbow-me/rainbowkit"
 
-import { noOp } from "@/lib/helpers"
+import { classnames, noOp } from "@/lib/helpers"
 import { useEmojiAvatar } from "@/lib/emojiAvatarForAddress"
 
 import { TbSend } from "react-icons/tb"
@@ -14,15 +14,28 @@ import RainbowInput from "@/components/RainbowInput"
 import SendMessage from "@/components/SendMessage"
 import NavItem from "./NavItem"
 
-function Layout({ children }: PropsWithChildren<{}>) {
+function Layout({
+  children,
+  showPreview,
+}: PropsWithChildren<{ showPreview?: boolean }>) {
   const avatar = useEmojiAvatar()
   const { openAccountModal } = useAccountModal()
   const { openConnectModal = noOp } = useConnectModal()
   const onAccountPress = openAccountModal || openConnectModal
 
   return (
-    <div className="flex p-4 max-w-6xl flex-col md:flex-row mx-auto min-h-screen">
-      <div className="flex md:flex-col md:px-4 gap-4 mb-4">
+    <main
+      className={classnames(
+        showPreview ? "lg:p-4" : "p-4",
+        "flex max-w-6xl flex-col md:flex-row mx-auto min-h-screen"
+      )}
+    >
+      <nav
+        className={classnames(
+          showPreview ? "hidden lg:flex" : "flex",
+          "md:flex-col md:px-4 gap-4 mb-4"
+        )}
+      >
         <NavItem
           isButton
           onClick={onAccountPress}
@@ -41,9 +54,14 @@ function Layout({ children }: PropsWithChildren<{}>) {
         </NavItem>
         <div className="py-2" />
         <SendMessage />
-      </div>
-      <div className="flex flex-col flex-grow space-y-4">
-        <div className="flex items-center justify-between">
+      </nav>
+      <section className="flex flex-col flex-grow">
+        <div
+          className={classnames(
+            showPreview ? "hidden lg:flex" : "flex",
+            "items-center justify-between"
+          )}
+        >
           <RainbowInput
             onText={dispatchInputEvent}
             className="w-full md:max-w-xs"
@@ -55,8 +73,8 @@ function Layout({ children }: PropsWithChildren<{}>) {
           </div>
         </div>
         {children}
-      </div>
-    </div>
+      </section>
+    </main>
   )
 }
 
