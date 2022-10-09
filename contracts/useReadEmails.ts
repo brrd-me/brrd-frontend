@@ -53,11 +53,14 @@ function useReadEmails(functionName: "emailsReceived" | "emailsSent") {
     return list.filter((item) => item.serialized.includes(filter))
   }, [filter, list.length])
 
+  const clearPreviewEmail = () => setPreviewEmail({} as SerializedEmail)
+
   return {
     emails,
     isEmpty: emails.length <= 0,
     showPreview: !!previewEmail.time,
     previewEmail,
+    clearPreviewEmail,
   }
 }
 
