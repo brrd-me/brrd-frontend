@@ -1,37 +1,64 @@
+import Link from "next/link"
+
 import { relativeFormat } from "@/lib/time"
 import { beautifyAddress, getGoerliAddressURL } from "@/lib/helpers"
 
-import ExternalLink from "@/components/ExternalLink"
 import RainbowButton from "@/components/RainbowButton"
 import emojiAvatarForAddress from "@/lib/emojiAvatarForAddress"
 
 import { GoReply } from "react-icons/go"
+import { HiExternalLink } from "react-icons/hi"
+import { IoArrowBack } from "react-icons/io5"
 import { RiShareForwardFill } from "react-icons/ri"
+import { BiMenu } from "react-icons/bi"
 
-type Props = IEmail & { show: boolean }
-function MessagePreview({ address, message, subject, time, show }: Props) {
+type Props = IEmail & { show: boolean; onHidePreview(): void }
+function MessagePreview({
+  address,
+  message,
+  subject,
+  time,
+  show,
+  onHidePreview,
+}: Props) {
   const avatar = emojiAvatarForAddress(address)
 
   if (!show) return null
   return (
-    <section className="flex flex-col p-4 border-l flex-grow">
-      <div className="flex items-center space-x-4">
-        <div
-          className="flex items-center justify-center w-8 h-8 rounded-full"
-          style={{ background: avatar.color }}
+    <section className="flex flex-col p-4 lg:border-l flex-grow">
+      <div className="flex items-center space-x-2">
+        <button
+          onClick={onHidePreview}
+          className="py-4 group flex items-center space-x-2"
         >
-          {avatar.emoji}
+          <IoArrowBack className="text-xl group-hover:-translate-x-px" />
+          <span>Back</span>
+        </button>
+        <div className="flex-grow" />
+        <Link href={getGoerliAddressURL(address)}>
+          <a
+            target="_blank"
+            className="flex border border-zinc-50 p-2 space-x-1 rounded-full items-center font-bold pr-3"
+          >
+            <div
+              className="flex items-center justify-center w-6 h-6 rounded-full"
+              style={{ background: avatar.color }}
+            >
+              {avatar.emoji}
+            </div>
+            <span className="text-sm">{beautifyAddress(address)}</span>
+            <HiExternalLink className="text-xl text-black/80" />
+          </a>
+        </Link>
+        <div className="border border-zinc-50 p-2 rounded-full">
+          <BiMenu className="text-2xl" />
         </div>
-        <ExternalLink href={getGoerliAddressURL(address)} className="h-8">
-          {beautifyAddress(address)}
-        </ExternalLink>
       </div>
-      <div className="my-4 pt-4">
-        <strong>{subject}</strong>
-        <p>{message}</p>
-      </div>
+      <h2 className="text-2xl font-bold">{subject}</h2>
+      <span className="text-xs">{relativeFormat(time)}</span>
+      <p className="mt-2">{message}</p>
       <div className="flex-grow" />
-      <div className="flex items-center justify-end space-x-4 overflow-hidden">
+      <div className="flex items-center space-x-4">
         <RainbowButton className="flex items-center space-x-2" isPlain>
           <GoReply />
           <span>REPLY</span>
@@ -40,8 +67,6 @@ function MessagePreview({ address, message, subject, time, show }: Props) {
           <RiShareForwardFill />
           <span>FORWARD</span>
         </RainbowButton>
-        <div className="flex-grow" />
-        <p className="text-xs">Sent {relativeFormat(time)}</p>
       </div>
     </section>
   )
