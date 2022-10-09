@@ -41,7 +41,7 @@ function MessageItem({
       onClick={handleOnClick}
       className={classnames(
         isPreviewEmail && "bg-zinc-50",
-        "relative text-left border-b border-b-zinc-50 last:border-b-0 max-w-xl flex items-center space-x-2 pl-2 py-2 hover:bg-gradient-to-br from-white to-zinc-50"
+        "w-full relative text-left border-b border-b-zinc-50 last:border-b-0 max-w-xl flex items-center space-x-2 pl-2 py-2 hover:bg-gradient-to-br from-white to-zinc-50"
       )}
     >
       <div
