@@ -2,15 +2,15 @@ import Link from "next/link"
 
 import { relativeFormat } from "@/lib/time"
 import { beautifyAddress, getGoerliAddressURL } from "@/lib/helpers"
-
-import RainbowButton from "@/components/RainbowButton"
 import emojiAvatarForAddress from "@/lib/emojiAvatarForAddress"
 
 import { GoReply } from "react-icons/go"
 import { HiExternalLink } from "react-icons/hi"
 import { IoArrowBack } from "react-icons/io5"
 import { RiShareForwardFill } from "react-icons/ri"
-import { BiMenu } from "react-icons/bi"
+
+import RainbowButton from "@/components/RainbowButton"
+import Menu from "./Menu"
 
 type Props = IEmail & { show: boolean; onHidePreview(): void }
 function MessagePreview({
@@ -29,7 +29,7 @@ function MessagePreview({
       <div className="flex items-center space-x-2">
         <button
           onClick={onHidePreview}
-          className="py-4 group flex items-center space-x-2"
+          className="py-2 group flex items-center space-x-2"
         >
           <IoArrowBack className="text-xl group-hover:-translate-x-px" />
           <span>Back</span>
@@ -50,9 +50,7 @@ function MessagePreview({
             <HiExternalLink className="text-xl text-black/80" />
           </a>
         </Link>
-        <div className="border border-zinc-50 p-2 rounded-full">
-          <BiMenu className="text-2xl" />
-        </div>
+        <Menu />
       </div>
       <h2 className="text-2xl font-bold">{subject}</h2>
       <span className="text-xs">{relativeFormat(time)}</span>
