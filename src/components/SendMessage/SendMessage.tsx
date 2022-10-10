@@ -1,5 +1,4 @@
 import { Fragment, useEffect } from "react"
-import { utils } from "ethers"
 import { RiSendPlaneFill } from "react-icons/ri"
 
 import useSendEmail from "@/contracts/useSendEmail"
@@ -9,7 +8,6 @@ import { MOCK_USER_LIST } from "@/src/mockData/users"
 
 import RainbowButton from "@/components/RainbowButton"
 import ExternalLink from "@/components/ExternalLink"
-import RainbowInput from "@/components/RainbowInput"
 import Modal from "@/components/Modal"
 import ActionButton from "./ActionButton"
 
@@ -25,13 +23,13 @@ function SendMessage() {
     addressOrUsername: "",
     isUserAlias: false,
   })
-  const { addressOrUsername, isUserAlias } = sendingTo
+  const { addressOrUsername } = sendingTo
 
   // Contract services
   const emailSender = useSendEmail()
 
   function handleSendEmail() {
-    emailSender.send(sendingTo.addressOrUsername, email.subject, email.body)
+    emailSender.send(addressOrUsername, email.subject, email.body)
   }
 
   useEffect(() => {
@@ -45,7 +43,6 @@ function SendMessage() {
     resetEmailState()
   }, [emailModal.isOn])
 
-  const showPositiveState = isUserAlias || utils.isAddress(addressOrUsername)
   return (
     <Fragment>
       <Modal
@@ -54,42 +51,54 @@ function SendMessage() {
         show={emailModal.isOn}
       >
         <div className="text-base flex flex-col h-full">
-          <div className="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-4">
-            <strong>Send To:</strong>
-            <div className="flex space-x-2">
-              <RainbowInput
-                isPlain
-                className={`w-full ${showPositiveState && "font-bold"}`}
+          <label
+            htmlFor="sendingTo"
+            className="flex cursor-text border-b items-center space-x-2"
+          >
+            <div className="whitespace-nowrap text-gray-400">To:</div>
+            <div className="relative flex-grow">
+              <div
+                hidden={!sendingTo.isUserAlias}
+                className="absolute bg-white z-[1] pointer-events-none left-0 h-full flex items-center"
+              >
+                <span className="pointer-events-none font-bold">
+                  {sendingTo.addressOrUsername}
+                </span>
+                <span className="text-xs ml-1">
+                  (
+                  <ExternalLink className="pointer-events-auto">
+                    0x0A2...401
+                  </ExternalLink>
+                  )
+                </span>
+              </div>
+              <input
+                id="sendingTo"
                 value={sendingTo.addressOrUsername}
-                onText={(addressOrUsername) =>
+                onChange={({ target: { value: addressOrUsername } }) =>
                   setSendingTo({ addressOrUsername })
                 }
+                className="w-full py-3 outline-none"
+                type="text"
                 placeholder="@username"
               />
-              {sendingTo.isUserAlias && (
-                <ExternalLink className="px-4">0x01a...df0</ExternalLink>
-              )}
             </div>
-          </div>
-          <div className="my-4 border-t">
-            <input
-              value={email.subject}
-              onChange={({ target: { value: subject } }) =>
-                setEmail({ subject })
-              }
-              className="w-full border-b py-3 outline-none"
-              type="text"
-              placeholder="Subject"
-            />
-            <textarea
-              value={email.body}
-              onChange={({ target: { value: body } }) => setEmail({ body })}
-              className="w-full min-h-[10rem] border-b py-3 outline-none"
-              placeholder="Body"
-            />
-          </div>
+          </label>
+          <input
+            value={email.subject}
+            onChange={({ target: { value: subject } }) => setEmail({ subject })}
+            className="w-full border-b py-3 outline-none"
+            type="text"
+            placeholder="Subject"
+          />
+          <textarea
+            value={email.body}
+            onChange={({ target: { value: body } }) => setEmail({ body })}
+            className="w-full min-h-[10rem] border-b py-3 outline-none"
+            placeholder="Body"
+          />
           <div className="flex-grow" />
-          <div className="flex justify-end">
+          <div className="flex justify-end mt-4">
             <RainbowButton
               onClick={handleSendEmail}
               className="flex items-center space-x-2 text-lg px-6 py-3"
