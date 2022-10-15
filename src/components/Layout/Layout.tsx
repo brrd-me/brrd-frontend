@@ -30,30 +30,32 @@ function Layout({
         "flex max-w-6xl flex-col md:flex-row mx-auto min-h-screen"
       )}
     >
-      <nav
-        className={classnames(
-          showPreview ? "hidden lg:flex" : "flex",
-          "md:flex-col md:px-4 gap-4 mb-4"
-        )}
-      >
-        <NavItem
-          isButton
-          onClick={onAccountPress}
-          style={{
-            background: avatar.color,
-          }}
-          className="md:hidden"
+      <nav className="flex flex-col md:items-center">
+        <section
+          className={classnames(
+            showPreview ? "hidden lg:flex" : "flex lg:flex-col",
+            "md:flex-col md:px-4 gap-4 mb-4"
+          )}
         >
-          {avatar.emoji}
-        </NavItem>
-        <NavItem href="/">
-          <AiOutlineInbox className="text-xl" />
-        </NavItem>
-        <NavItem href="/sent">
-          <TbSend className="text-xl" />
-        </NavItem>
-        <div className="py-2" />
-        <SendMessage />
+          <NavItem
+            isButton
+            onClick={onAccountPress}
+            style={{
+              background: avatar.color,
+            }}
+            className="md:hidden"
+          >
+            {avatar.emoji}
+          </NavItem>
+          <NavItem href="/">
+            <AiOutlineInbox className="text-xl" />
+          </NavItem>
+          <NavItem href="/sent">
+            <TbSend className="text-xl" />
+          </NavItem>
+          <div className="py-2" />
+        </section>
+        <SendMessage showPreview={showPreview} />
       </nav>
       <section className="flex flex-col flex-grow">
         <div
