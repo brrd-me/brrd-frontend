@@ -1,6 +1,7 @@
 import { Fragment, useEffect } from "react"
 import { RiSendPlaneFill } from "react-icons/ri"
 
+import { noOp } from "@/lib/helpers"
 import useSendEmail from "@/contracts/useSendEmail"
 import useOnOffMachine from "@/lib/hooks/useOnOffMachine"
 import useAsyncState from "@/lib/hooks/useAsyncState"
@@ -11,13 +12,15 @@ import ExternalLink from "@/components/ExternalLink"
 import Modal from "@/components/Modal"
 import ActionButton from "./ActionButton"
 
-const cleanUpUsername = (rawUsername: string) => rawUsername.replace(/@/g, "")
+import { useSendMessageContext } from "./SendMessageContext"
 
-function SendMessage() {
+function SendMessage({ showPreview }: { showPreview?: boolean }) {
+  const context = useSendMessageContext()
   const emailModal = useOnOffMachine()
   const [email, setEmail, resetEmailState] = useAsyncState({
     body: "",
     subject: "",
+    reply: "",
   })
   const [sendingTo, setSendingTo, resetSendingToState] = useAsyncState({
     addressOrUsername: "",
@@ -25,11 +28,11 @@ function SendMessage() {
   })
   const { addressOrUsername } = sendingTo
 
-  // Contract services
-  const emailSender = useSendEmail()
+  // Contract Mail Services
+  const mailService = useSendEmail()
 
   function handleSendEmail() {
-    emailSender.send(addressOrUsername, email.subject, email.body)
+    mailService.send(addressOrUsername, email.subject, email.body).catch(noOp)
   }
 
   useEffect(() => {
@@ -39,10 +42,32 @@ function SendMessage() {
   }, [addressOrUsername])
 
   useEffect(() => {
-    resetSendingToState()
-    resetEmailState()
-  }, [emailModal.isOn])
+    if (emailModal.isOff) {
+      resetSendingToState()
+      resetEmailState()
+      // Reset state only when user closes modal
+    }
+  }, [emailModal.isOff])
 
+  function onExternalSendMessageRequest(props: {
+    body: string
+    subject: string
+    sendingTo: string
+    reply: string
+  }) {
+    const { sendingTo: addressOrUsername, body, subject, reply } = props
+    emailModal.turnOn()
+    setSendingTo({ addressOrUsername })
+    setEmail({
+      body,
+      subject,
+      reply,
+    })
+  }
+
+  context.__defineOpenMessageWithContent(onExternalSendMessageRequest)
+
+  const isReply = email.reply.length > 0
   return (
     <Fragment>
       <Modal
@@ -73,6 +98,7 @@ function SendMessage() {
                 </span>
               </div>
               <input
+                readOnly={isReply}
                 id="sendingTo"
                 value={sendingTo.addressOrUsername}
                 onChange={({ target: { value: addressOrUsername } }) =>
@@ -86,11 +112,18 @@ function SendMessage() {
           </label>
           <input
             value={email.subject}
+            readOnly={isReply}
             onChange={({ target: { value: subject } }) => setEmail({ subject })}
             className="w-full border-b py-3 outline-none"
             type="text"
             placeholder="Subject"
           />
+          <div
+            hidden={!isReply}
+            className="text-gray-400 mt-4 max-h-[4rem] overflow-hidden flex items-end"
+          >
+            {email.reply}
+          </div>
           <textarea
             value={email.body}
             onChange={({ target: { value: body } }) => setEmail({ body })}
@@ -110,9 +143,13 @@ function SendMessage() {
           </div>
         </div>
       </Modal>
-      <ActionButton onClick={emailModal.turnOn} />
+      <ActionButton showPreview={showPreview} onClick={emailModal.turnOn} />
     </Fragment>
   )
+}
+
+function cleanUpUsername(rawUsername: string) {
+  return rawUsername.replace(/@/g, "")
 }
 
 export default SendMessage
