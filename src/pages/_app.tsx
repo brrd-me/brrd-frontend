@@ -6,6 +6,8 @@ import { chain, configureChains, createClient, WagmiConfig } from "wagmi"
 import { alchemyProvider } from "wagmi/providers/alchemy"
 import { publicProvider } from "wagmi/providers/public"
 
+import { SendMessageProvider } from "@/components/SendMessage"
+
 const hhDefaultURL = chain.hardhat.rpcUrls.default
 const customChain = {
   ...chain.hardhat,
@@ -42,7 +44,9 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider coolMode chains={chains}>
-        <Component {...pageProps} />
+        <SendMessageProvider>
+          <Component {...pageProps} />
+        </SendMessageProvider>
       </RainbowKitProvider>
     </WagmiConfig>
   )
