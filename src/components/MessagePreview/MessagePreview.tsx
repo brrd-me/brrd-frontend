@@ -10,9 +10,9 @@ import { IoArrowBack } from "react-icons/io5"
 import { RiShareForwardFill } from "react-icons/ri"
 
 import RainbowButton from "@/components/RainbowButton"
+import { useSendMessageContext } from "@/components/SendMessage"
 import Menu from "./Menu"
 
-type Props = IEmail & { show: boolean; onHidePreview(): void }
 function MessagePreview({
   address,
   message,
@@ -20,9 +20,27 @@ function MessagePreview({
   time,
   show,
   onHidePreview,
-}: Props) {
+}: IEmail & { show: boolean; onHidePreview(): void }) {
+  const sendMessageContext = useSendMessageContext()
   const avatar = emojiAvatarForAddress(address)
 
+  function handleReply() {
+    sendMessageContext.openMessageWithContent({
+      body: "",
+      sendingTo: address,
+      subject: subject,
+      reply: `${message} ...Your reply:`,
+    })
+  }
+
+  function handleForward() {
+    sendMessageContext.openMessageWithContent({
+      body: `ADDRESS: ${address}\n\n________\n\n${message}`,
+      sendingTo: "",
+      reply: "",
+      subject: `FORWARD | ${subject}`,
+    })
+  }
   if (!show) return null
   return (
     <section className="flex flex-col p-4 lg:border-l flex-grow">
@@ -57,11 +75,19 @@ function MessagePreview({
       <p className="mt-2">{message}</p>
       <div className="flex-grow" />
       <div className="flex items-center space-x-4">
-        <RainbowButton className="flex items-center space-x-2" isPlain>
+        <RainbowButton
+          onClick={handleReply}
+          className="flex items-center space-x-2"
+          isPlain
+        >
           <GoReply />
           <span>REPLY</span>
         </RainbowButton>
-        <RainbowButton className="flex items-center space-x-2" isPlain>
+        <RainbowButton
+          onClick={handleForward}
+          className="flex items-center space-x-2"
+          isPlain
+        >
           <RiShareForwardFill />
           <span>FORWARD</span>
         </RainbowButton>
