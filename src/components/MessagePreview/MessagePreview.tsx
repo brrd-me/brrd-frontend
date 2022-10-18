@@ -70,7 +70,7 @@ function MessagePreview({
         </Link>
         <Menu />
       </div>
-      <h2 className="text-2xl font-bold">{subject}</h2>
+      <h2 className="text-2xl font-bold mt-2">{subject}</h2>
       <span className="text-xs">{relativeFormat(time)}</span>
       <p className="mt-2">{message}</p>
       <div className="flex-grow" />

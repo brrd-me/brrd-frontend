@@ -17,7 +17,7 @@ function Modal({ children, ...props }: DialogProps) {
         leaveFrom="opacity-95 scale-95"
         leaveTo="opacity-0 scale-90"
       >
-        <Dialog.Panel className="w-screen max-w-xl transform rounded-t-[24px] md:rounded-b-[24px] bg-white py-6 px-8 text-left align-middle shadow-xl transition-all">
+        <Dialog.Panel className="w-screen max-w-xl transform rounded-t-[24px] md:rounded-b-[24px] bg-white py-6 px-8 text-left align-middle shadow-xl transition-all max-h-screen">
           {children}
         </Dialog.Panel>
       </Transition.Child>

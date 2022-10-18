@@ -34,7 +34,6 @@ function PrimitiveDialog({
         >
           <div className="fixed inset-0 bg-black/30" />
         </Transition.Child>
-        <div tabIndex={0} className="opacity-0" />
         <div className={classnames("fixed inset-0 flex", className)}>
           <div className="relative">
             {show && <CloseButton onClose={onClose} />}
