@@ -1,3 +1,4 @@
+import { utils } from "ethers"
 import { chain } from "wagmi"
 
 export const classnames = (...classList: any[]) =>
@@ -9,3 +10,5 @@ export const getGoerliTxURL = (tx: string) =>
   `${chain.goerli.blockExplorers?.default.url}/tx/${tx}`
 export const getGoerliAddressURL = (address: string) =>
   `${chain.goerli.blockExplorers?.default.url}/address/${address}`
+export const recoverAddressFromSig = (message: string, signature: string) =>
+  utils.recoverAddress(utils.arrayify(utils.hashMessage(message)), signature)
