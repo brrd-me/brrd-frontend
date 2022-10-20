@@ -36,8 +36,7 @@ const HomePage: NextPage = () => {
                 address={item.sender}
                 previewEmail={previewEmail}
                 onClick={item.setAsPreviewEmail}
-                time={item.time.toNumber()}
-                key={`email-item-${item.time}`}
+                key={`email-item-${item.serialized}`}
               />
             )
           })}

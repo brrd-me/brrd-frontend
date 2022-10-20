@@ -2,7 +2,7 @@ import type { PropsWithChildren } from "react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 
-import { classnames } from "@/src/lib/helpers"
+import { classnames } from "@/lib/helpers"
 
 function NavItem({
   children,

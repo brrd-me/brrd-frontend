@@ -7,7 +7,7 @@ interface Config<T> {
 const DEFAULT_RAW_STATE = "{}"
 const useStorageState = <T>(
   storeKey: string,
-  defaultState: T,
+  defaultState: Partial<T>,
   config?: Config<T>
 ) => {
   const [state, setState] = useState({ ...defaultState, ...config?.mockState })
