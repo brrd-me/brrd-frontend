@@ -5,11 +5,11 @@ import { classnames } from "@/lib/helpers"
 
 const STORAGE_KEY = "BRRD_USER_SEEN_MAILS"
 function MessageItem({
-  time,
   message,
   subject,
   address,
   onClick,
+  timestamp,
   serialized,
   previewEmail,
 }: ISerializedEmail & {
@@ -59,7 +59,7 @@ function MessageItem({
       <div className="flex flex-col">
         <strong>{subject}</strong>
         <p>{message}</p>
-        <p className="text-xs">{relativeFormat(time)}</p>
+        <p className="text-xs">{relativeFormat(timestamp)}</p>
       </div>
     </button>
   )

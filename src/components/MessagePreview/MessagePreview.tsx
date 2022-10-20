@@ -17,8 +17,8 @@ function MessagePreview({
   address,
   message,
   subject,
-  time,
   show,
+  timestamp,
   onHidePreview,
 }: IEmail & { show: boolean; onHidePreview(): void }) {
   const sendMessageContext = useSendMessageContext()
@@ -71,7 +71,7 @@ function MessagePreview({
         <Menu />
       </div>
       <h2 className="text-2xl font-bold mt-2">{subject}</h2>
-      <span className="text-xs">{relativeFormat(time)}</span>
+      <span className="text-xs">{relativeFormat(timestamp)}</span>
       <p className="mt-2">{message}</p>
       <div className="flex-grow" />
       <div className="flex items-center space-x-4">
