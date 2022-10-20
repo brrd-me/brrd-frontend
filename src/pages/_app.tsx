@@ -1,4 +1,4 @@
-import "@/src/styles/globals.css"
+import "@/root/styles/globals.css"
 import "@rainbow-me/rainbowkit/styles.css"
 import type { AppProps } from "next/app"
 import { RainbowKitProvider, getDefaultWallets } from "@rainbow-me/rainbowkit"
@@ -6,6 +6,7 @@ import { chain, configureChains, createClient, WagmiConfig } from "wagmi"
 import { alchemyProvider } from "wagmi/providers/alchemy"
 import { publicProvider } from "wagmi/providers/public"
 
+import ApplicationProvider from "@/sharedState/ApplicationProvider"
 import { SendMessageProvider } from "@/components/SendMessage"
 
 const hhDefaultURL = chain.hardhat.rpcUrls.default
@@ -44,9 +45,11 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider coolMode chains={chains}>
-        <SendMessageProvider>
-          <Component {...pageProps} />
-        </SendMessageProvider>
+        <ApplicationProvider>
+          <SendMessageProvider>
+            <Component {...pageProps} />
+          </SendMessageProvider>
+        </ApplicationProvider>
       </RainbowKitProvider>
     </WagmiConfig>
   )

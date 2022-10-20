@@ -1,20 +1,28 @@
-import { Fragment, useEffect } from "react"
+import { Fragment, useEffect, useState } from "react"
+import { useProvider } from "wagmi"
 import { RiSendPlaneFill } from "react-icons/ri"
 
-import { noOp } from "@/lib/helpers"
+import { MOCK_USER_LIST } from "@/root/mockData/users"
 import useSendEmail from "@/contracts/useSendEmail"
 import useOnOffMachine from "@/lib/hooks/useOnOffMachine"
+import useAccountPublics from "@/lib/hooks/useAccuntPublics"
 import useAsyncState from "@/lib/hooks/useAsyncState"
-import { MOCK_USER_LIST } from "@/src/mockData/users"
+import { createSharedWallet } from "@/lib/wallet"
+import { generateEncryptedEmail } from "@/lib/email"
+import { noOp } from "@/lib/helpers"
 
 import RainbowButton from "@/components/RainbowButton"
 import ExternalLink from "@/components/ExternalLink"
 import Modal from "@/components/Modal"
-import ActionButton from "./ActionButton"
+import { useApplicationContext } from "@/sharedState/ApplicationContext"
 
 import { useSendMessageContext } from "./SendMessageContext"
+import ActionButton from "./ActionButton"
 
 function SendMessage({ showPreview }: { showPreview?: boolean }) {
+  // We asume signature is existent at user login
+  const provider = useProvider()
+  const { userProxyWallet, validateForRemoteSig } = useApplicationContext()
   const context = useSendMessageContext()
   const emailModal = useOnOffMachine()
   const [email, setEmail, resetEmailState] = useAsyncState({
@@ -28,11 +36,30 @@ function SendMessage({ showPreview }: { showPreview?: boolean }) {
   })
   const { addressOrUsername } = sendingTo
 
+  const recipientPublics = useAccountPublics(addressOrUsername)
   // Contract Mail Services
   const mailService = useSendEmail()
-
-  function handleSendEmail() {
-    mailService.send(addressOrUsername, email.subject, email.body).catch(noOp)
+  async function handleSendEmail() {
+    if (!recipientPublics) {
+      return console.log("NO RECEPIENT")
+    }
+    /// Mock to encrypt
+    if (userProxyWallet) {
+      const { timestamp } = await provider.getBlock("latest")
+      const sharedWallet = createSharedWallet(
+        userProxyWallet.privateKey,
+        recipientPublics.publicKey
+      )
+      const encryptedEmail = await generateEncryptedEmail({
+        ...email,
+        timestamp,
+        sharedWallet,
+        receiverPublicKey: recipientPublics.publicKey,
+      })
+      mailService.send(sendingTo.addressOrUsername, encryptedEmail).catch(noOp)
+    } else {
+      validateForRemoteSig()
+    }
   }
 
   useEffect(() => {
