@@ -3,7 +3,7 @@ import { useAccount, useSignMessage } from "wagmi"
 import { encryptWithPublicKey, cipher } from "eth-crypto"
 
 import fetcher from "@/root/api/fetcher"
-import { recoverAddressFromSig } from "@/lib/helpers"
+import { recoverAddressFromSig, waitForClearStack } from "@/lib/helpers"
 import useProxyWallet from "@/lib/hooks/useProxyWallet"
 import useStorageState from "@/lib/hooks/useStorateState"
 import { SIG_MESSAGES } from "@/lib/constants"
@@ -11,6 +11,7 @@ import { SIG_MESSAGES } from "@/lib/constants"
 import ApplicationContext from "./ApplicationContext"
 
 const SERVER_PUBLIC = process.env.NEXT_PUBLIC_SERVER_PUBLIC
+const STORAGE_KEY = "BRRD-DHX.sig"
 function ApplicationProvider({ children }: PropsWithChildren) {
   const { connector } = useAccount()
   // context shared state
@@ -20,7 +21,7 @@ function ApplicationProvider({ children }: PropsWithChildren) {
   const [{ signature: cachedSignature }, setCachedSignature] = useStorageState<{
     signature: string
   }>(
-    "BRRD-DHX.sig",
+    STORAGE_KEY,
     {},
     {
       mockState: {
@@ -41,14 +42,26 @@ function ApplicationProvider({ children }: PropsWithChildren) {
   const validateForRemoteSig = useStoreRemotePK(requestUserSignature, signature)
 
   useEffect(() => {
+    const storageIsNull =
+      signature === undefined || localStorage.getItem(STORAGE_KEY) === null
     if (signature) {
       setCachedSignature({ signature })
       setUserSignature(signature)
-    } else if (connector) {
+    } else if (connector && storageIsNull) {
       // request for sig if user connected
       requestUserSignature()
     }
   }, [signature, connector?.ready])
+
+  useEffect(() => {
+    if (connector?.ready) {
+      connector.on("change", () => {
+        localStorage.removeItem(STORAGE_KEY)
+        waitForClearStack(() => location.reload())
+        // reset app state on chain or account change
+      })
+    }
+  }, [connector?.ready])
 
   return (
     <ApplicationContext.Provider
@@ -72,6 +85,7 @@ function useStoreRemotePK(
   useEffect(() => {
     async function storeRemotePk() {
       const address = recoverAddressFromSig(SIG_MESSAGES.signin, signature!)
+      // Ephimeral client signature
       const ecsig = cipher.stringify(
         await encryptWithPublicKey(SERVER_PUBLIC, signature!)
       )
