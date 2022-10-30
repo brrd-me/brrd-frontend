@@ -10,6 +10,8 @@ import ApplicationProvider from "@/sharedState/ApplicationProvider"
 import { SendMessageProvider } from "@/components/SendMessage"
 
 const hhDefaultURL = chain.hardhat.rpcUrls.default
+const ALCHEMY_KEY =
+  process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || "_gg7wSSi0KMBsdKnGVfHDueq6xMB9EkC"
 const customChain = {
   ...chain.hardhat,
   rpcUrls: {
@@ -23,7 +25,7 @@ const { chains, provider, webSocketProvider } = configureChains(
     alchemyProvider({
       // This is Alchemy's default API key.
       // You can get your own at https://dashboard.alchemyapi.io
-      apiKey: "_gg7wSSi0KMBsdKnGVfHDueq6xMB9EkC",
+      apiKey: ALCHEMY_KEY,
     }),
     publicProvider(),
   ]
