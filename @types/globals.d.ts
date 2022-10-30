@@ -2,6 +2,7 @@ declare namespace NodeJS {
   export interface ProcessEnv {
     NEXT_PUBLIC_HH_DEV_URL: string
     NEXT_PUBLIC_SERVER_PUBLIC: string
+    NEXT_PUBLIC_ALCHEMY_API_KEY: string
     SERVER_PRIVATE: string
   }
 }
