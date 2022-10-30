@@ -30,7 +30,8 @@ export async function generateEncryptedEmail({
       receiverPublicKey,
       sharedWallet.privateKey
     ),
-    // End user can decrypt content with shared secret
-    // He/She can re-create it with is pubkey on it's end
+    // End user can decrypt `content` with the shared `secret`
+    // Only it can re-create with is pubkey.
+    // We call this PseudoDHX Key
   })
 }

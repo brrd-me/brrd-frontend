@@ -12,3 +12,4 @@ export const getGoerliAddressURL = (address: string) =>
   `${chain.goerli.blockExplorers?.default.url}/address/${address}`
 export const recoverAddressFromSig = (message: string, signature: string) =>
   utils.recoverAddress(utils.arrayify(utils.hashMessage(message)), signature)
+export const waitForClearStack = (fn: any) => setTimeout(fn, 0)
